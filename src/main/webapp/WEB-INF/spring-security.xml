@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans 
+	xmlns ="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+	
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security.xsd 
+			
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+<!-- 	<http auto-config="true" use-expressions="true"> -->
+<!-- 		<intercept-url pattern="/welcome*" access="hasRole('ROLE_USER')" /> -->
+<!-- 	<http-basic/> -->
+<!-- 	</http> -->
+	
+		<http auto-config="true" >
+<!-- 		<intercept-url pattern="/welcome**" access="hasRole('ROLE_USER')" /> -->
+	<form-login login-page="/login" login-processing-url="/loginpage" default-target-url="/welcome" authentication-failure-url="/loginfailed" />
+	<csrf disabled="true"/>
+	<logout logout-success-url="/index" />
+	</http>	
+
+<!-- 	<http auto-config="true" > -->
+<!-- 		<intercept-url pattern="/login_success**" access="hasRole('ROLE_USER')" /> -->
+<!-- 	<form-login login-page="/login" default-target-url="/login_success" authentication-failure-url="/loginfailed" /> -->
+<!-- 	<csrf disabled="true"/> -->
+<!-- 	<logout logout-success-url="/index" /> -->
+<!-- 	</http>	 -->
+	
+<!-- 	<authentication-manager> -->
+<!-- 	  <authentication-provider> -->
+<!-- 	   <password-encoder hash="bcrypt" /> -->
+<!-- 	    <user-service> -->
+<!-- 		<user name="kiran" password="$2a$10$J8z250EXFGX6oWJS57ruR.wpM6UOIpHxzCa1sKdz9rsQP9i.9xGSO" authorities="ROLE_USER" /> -->
+<!-- 	    <user name="ashish" password="$2a$10$g8xEg4I/1T3U0smhGcI8ueQ9s/hqnsMMWnhi0JNIn.5enfJfWTBYO" authorities="ROLE_ADMIN" /> -->
+<!-- 	    </user-service> -->
+<!-- 	  </authentication-provider> -->
+<!-- 	</authentication-manager> -->
+
+	<authentication-manager> 
+	  <authentication-provider>
+	   <password-encoder hash="bcrypt" />
+	    <jdbc-user-service data-source-ref="DataSource" 
+	    users-by-username-query="select username,password,enabled from User where username=?" 
+	    authorities-by-username-query="select username,role from User where username=?" />
+	  </authentication-provider>
+	</authentication-manager>
+</beans:beans>
